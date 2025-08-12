@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/cadastro.dart';
+import 'package:taskflow/screens/tarefas.dart'; 
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _obscurePassword = true; 
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +115,10 @@ class LoginPage extends StatelessWidget {
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Email",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -115,8 +127,9 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      // Campo de Senha
+                      // Campo de Senha com olhinho
                       TextField(
+                        obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -126,16 +139,30 @@ class LoginPage extends StatelessWidget {
                               height: 20,
                             ),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              color: const Color(0xFFA069FF),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Senha",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 10),
                       Center(
                         child: TextButton(
@@ -156,7 +183,12 @@ class LoginPage extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const TarefasPage()),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFA069FF),
                             padding: const EdgeInsets.symmetric(vertical: 15),

@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/screens/login.dart';
 
-class CadastroPage extends StatelessWidget {
+class CadastroPage extends StatefulWidget {
   const CadastroPage({super.key});
+
+  @override
+  State<CadastroPage> createState() => _CadastroPageState();
+}
+
+class _CadastroPageState extends State<CadastroPage> {
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +26,28 @@ class CadastroPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 40),
 
-                // Linha com seta e título
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
+                  child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Color(0xFF55525B)),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back, color: Color(0xFF55525B)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'TaskFlow',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFA069FF),
+                      const Center(
+                        child: Text(
+                          'TaskFlow',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFA069FF),
+                          ),
                         ),
                       ),
                     ],
@@ -46,7 +59,7 @@ class CadastroPage extends StatelessWidget {
                 // Card
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height - 60, 
+                  height: MediaQuery.of(context).size.height - 60,
                   decoration: const BoxDecoration(
                     color: Color(0xFFFDFDFE),
                     borderRadius: BorderRadius.only(
@@ -70,6 +83,7 @@ class CadastroPage extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
                                 color: Color(0xFF55525B),
                               ),
                             ),
@@ -96,7 +110,7 @@ class CadastroPage extends StatelessWidget {
                           hintStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
-                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -122,7 +136,7 @@ class CadastroPage extends StatelessWidget {
                           hintStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
-                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -133,6 +147,7 @@ class CadastroPage extends StatelessWidget {
 
                       // Campo Senha
                       TextField(
+                        obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -142,13 +157,24 @@ class CadastroPage extends StatelessWidget {
                               height: 20,
                             ),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              color: const Color(0xFFA069FF),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Senha",
                           hintStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
-                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -157,7 +183,9 @@ class CadastroPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
+                      // Campo Confirmar Senha
                       TextField(
+                        obscureText: _obscureConfirmPassword,
                         decoration: InputDecoration(
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -167,13 +195,24 @@ class CadastroPage extends StatelessWidget {
                               height: 20,
                             ),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                              color: const Color(0xFFA069FF),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureConfirmPassword = !_obscureConfirmPassword;
+                              });
+                            },
+                          ),
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Confirmar Senha",
                           hintStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
-                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -194,7 +233,12 @@ class CadastroPage extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const LoginPage()),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFA069FF),
                             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -209,7 +253,7 @@ class CadastroPage extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 20), 
+                      const SizedBox(height: 20),
 
                       Center(
                         child: TextButton(
@@ -223,8 +267,6 @@ class CadastroPage extends StatelessWidget {
                           ),
                         ),
                       ),
-
-
                     ],
                   ),
                 ),

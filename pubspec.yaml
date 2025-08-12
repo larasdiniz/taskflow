@@ -24,3 +24,10 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/Open_Sans/static/OpenSans_Condensed-Light.ttf
+        - asset: assets/fonts/Open_Sans/static/OpenSans_Condensed-Bold.ttf
+          weight: 700
+
