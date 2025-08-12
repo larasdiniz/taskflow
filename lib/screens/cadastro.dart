@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:taskflow/screens/cadastro.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class CadastroPage extends StatelessWidget {
+  const CadastroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,43 +15,38 @@ class LoginPage extends StatelessWidget {
           child: IntrinsicHeight(
             child: Column(
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: 40),
 
-                // Logo no topo
+                // Linha com seta e título
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/LOGO.png',
-                          height: 140,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Color(0xFF55525B)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'TaskFlow',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFA069FF),
                         ),
-                        const SizedBox(height: 1),
-                        const Text(
-                          'TaskFlow',
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFA069FF),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'Organize sua vida com inteligência',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Color(0xFF818181),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
 
-                // Card 
+                const SizedBox(height: 20),
+
+                // Card
                 Container(
                   width: double.infinity,
+                  height: MediaQuery.of(context).size.height - 60, 
                   decoration: const BoxDecoration(
                     color: Color(0xFFFDFDFE),
                     borderRadius: BorderRadius.only(
@@ -72,7 +66,7 @@ class LoginPage extends StatelessWidget {
                         child: Column(
                           children: const [
                             Text(
-                              'Entrar',
+                              'Cadastro',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -80,18 +74,36 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 5),
-                            Text(
-                              'Acesse sua conta para continuar',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Color(0xFF55525B),
-                              ),
-                            ),
                           ],
                         ),
                       ),
 
                       const SizedBox(height: 30),
+
+                      TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Image.asset(
+                              'assets/icons/icon_person.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF9F9FA),
+                          hintText: "Nome",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
 
                       // Campo de Email
                       TextField(
@@ -107,6 +119,10 @@ class LoginPage extends StatelessWidget {
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Email",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -115,7 +131,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      // Campo de Senha
+                      // Campo Senha
                       TextField(
                         decoration: InputDecoration(
                           prefixIcon: Padding(
@@ -129,6 +145,35 @@ class LoginPage extends StatelessWidget {
                           filled: true,
                           fillColor: const Color(0xFFF9F9FA),
                           hintText: "Senha",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Image.asset(
+                              'assets/icons/icon_senha.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF9F9FA),
+                          hintText: "Confirmar Senha",
+                          hintStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
@@ -137,22 +182,15 @@ class LoginPage extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 10),
-                      Center(
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Esqueceu a senha?',
-                            style: TextStyle(
-                              color: Color(0xFFA069FF),
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
 
+                      Container(
+                        width: double.infinity,
+                        height: 1,
+                        color: const Color(0xFF818181),
+                      ),
                       const SizedBox(height: 20),
 
-                      // Botão de login
+                      // Botão de cadastro
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -165,72 +203,28 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            "Entrar",
+                            "Criar Conta",
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
                       ),
 
-                      const SizedBox(height: 20),
-
-                      Container(
-                        width: double.infinity,
-                        height: 1,
-                        color: const Color(0xFF818181),
-                      ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 20), 
 
                       Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const CadastroPage()),
-                            );
-                          },
+                        child: TextButton(
+                          onPressed: () {},
                           child: const Text(
-                            'Não tem conta?',
+                            'Já tem uma conta?',
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF55525B),
-                              decoration: TextDecoration.underline, // indica que é clicável
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      // Botão Entrar com Google
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // ação do login Google aqui
-                          },
-                          icon: Image.asset(
-                            'assets/images/google.png', 
-                            height: 24,
-                            width: 24,
-                          ),
-                          label: const Text(
-                            'Entrar com Google',
-                            style: TextStyle(
+                              color: Color(0xFFA069FF),
                               fontSize: 18,
-                              color: Color(0xFF413491),
                             ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFF0F2F5),
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            elevation: 0,
-                            shadowColor: Colors.transparent,
                           ),
                         ),
                       ),
+
+
                     ],
                   ),
                 ),
