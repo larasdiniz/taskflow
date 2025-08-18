@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFF55525B),
-                              decoration: TextDecoration.underline, // indica que é clicável
+                              decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
