@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/login.dart';
 
+class Tarefa {
+  String titulo;
+  String prioridade;
+  bool concluida;
+
+  Tarefa({
+    required this.titulo,
+    required this.prioridade,
+    this.concluida = false,
+  });
+}
+
 class TarefasPage extends StatefulWidget {
   const TarefasPage({super.key});
 
@@ -12,67 +24,94 @@ class _TarefasPageState extends State<TarefasPage> {
   String prioridadeSelecionada = 'Alta';
   final List<String> prioridades = ['Alta', 'Média', 'Baixa'];
 
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      // aqui futuramente pode colocar a navegação para outras páginas
+    });
+  }
+
+  final List<Tarefa> tarefas = [
+    Tarefa(titulo: "Revisar proposta do projeto", prioridade: "Alta"),
+    Tarefa(titulo: "Enviar relatório mensal", prioridade: "Alta"),
+    Tarefa(titulo: "Agendar reunião com a equipe", prioridade: "Média"),
+    Tarefa(titulo: "Finalizar apresentação", prioridade: "Média"),
+    Tarefa(titulo: "Organizar documentos", prioridade: "Baixa"),
+  ];
+
+  Color corDaBolinha(Tarefa tarefa) {
+    if (tarefa.concluida) return const Color(0xFFB991FF);
+    switch (tarefa.prioridade) {
+      case "Alta":
+        return const Color(0xFFFF6969);
+      case "Média":
+        return const Color(0xFFE6C026);
+      case "Baixa":
+        return const Color(0xFF818181);
+      default:
+        return Colors.grey; 
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F9),
+
+      // AppBar
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF6F6F9),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Tarefas',
+          style: TextStyle(
+            color: Color(0xFFA069FF),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            },
+            child: Image.asset('assets/icons/icon_ajuda.png', height: 24),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.add,
+              color: Color(0xFF000000),
+              size: 28,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 12),
+        ],
+      ),
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // AppBar customizado
-            AppBar(
-              backgroundColor: const Color(0xFFF6F6F9),
-              elevation: 0,
-              centerTitle: true,
-              title: const Text(
-                'Tarefas',
-                style: TextStyle(
-                  color: Color(0xFFA069FF),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              iconTheme: const IconThemeData(
-                color: Color(0xFFA069FF),
-              ),
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/icons/icon_ajuda.png',
-                    height: 24,
-                  ),
-                ),
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.add,
-                    color: Color(0xFF000000),
-                    size: 28,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(width: 12),
-              ],
-            ),
-
             // Perfil
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -97,10 +136,7 @@ class _TarefasPageState extends State<TarefasPage> {
                       SizedBox(height: 4),
                       Text(
                         "Vamos organizar suas tarefas",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -130,10 +166,7 @@ class _TarefasPageState extends State<TarefasPage> {
                         children: const [
                           Text(
                             "Taxa de conclusão",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
                           SizedBox(height: 8),
                           Row(
@@ -224,15 +257,15 @@ class _TarefasPageState extends State<TarefasPage> {
 
             const SizedBox(height: 20),
 
-            // Filtros abaixo dos cards
+            // Filtros
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  // Card Prioridade
+                  // Filtro Prioridade
                   Expanded(
                     child: Container(
-                      height: 50, 
+                      height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -259,12 +292,17 @@ class _TarefasPageState extends State<TarefasPage> {
                                 value: prioridadeSelecionada,
                                 dropdownColor: const Color(0xFFA069FF),
                                 iconEnabledColor: Colors.white,
-                                style: const TextStyle(color: Colors.white, fontSize: 14),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
                                 items: prioridades
-                                    .map((p) => DropdownMenuItem(
-                                          value: p,
-                                          child: Text(p),
-                                        ))
+                                    .map(
+                                      (p) => DropdownMenuItem(
+                                        value: p,
+                                        child: Text(p),
+                                      ),
+                                    )
                                     .toList(),
                                 onChanged: (value) {
                                   setState(() {
@@ -280,10 +318,10 @@ class _TarefasPageState extends State<TarefasPage> {
                   ),
                   const SizedBox(width: 12),
 
-                  // Card Ordenar por
+                  // Filtro Ordenar
                   Expanded(
                     child: Container(
-                      height: 50, 
+                      height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFE0D9F0),
@@ -312,12 +350,134 @@ class _TarefasPageState extends State<TarefasPage> {
               ),
             ),
 
-
             const SizedBox(height: 20),
 
-            // Espaço para lista de tarefas depois
+            // Lista de tarefas
             Expanded(
-              child: Container(),
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemCount: tarefas.length,
+                itemBuilder: (context, index) {
+                  final tarefa = tarefas[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.15),
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              tarefa.concluida = !tarefa.concluida;
+                            });
+                          },
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: tarefa.concluida
+                                  ? corDaBolinha(tarefa)
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: corDaBolinha(tarefa),
+                                width: 2,
+                              ),
+                            ),
+                            child: tarefa.concluida
+                                ? const Icon(
+                                    Icons.check,
+                                    size: 16,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tarefa.titulo,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: tarefa.concluida
+                                      ? Colors.grey
+                                      : Colors.black,
+                                  decoration: tarefa.concluida
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Prioridade: ${tarefa.prioridade}",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Footer corrigido
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Color(0xFF818181),
+              width: 1,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: const Color(0xFF413491),
+          unselectedItemColor: const Color(0xFF55525B),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.check),
+              label: "Tarefas",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.folder),
+              label: "Categorias",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.emoji_events),
+              label: "Metas",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              label: "Estatísticas",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Config...",
             ),
           ],
         ),
