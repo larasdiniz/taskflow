@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/categorias.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
+import 'package:taskflow/screens/metas.dart'; 
 
 class Tarefa {
   String titulo;
   String prioridade;
   bool concluida;
-  DateTime? prazo; // Adicionando campo de prazo (pode ser nulo)
-
+  DateTime? prazo; 
   Tarefa({
     required this.titulo,
     required this.prioridade,
     this.concluida = false,
-    this.prazo, // Prazo opcional
+    this.prazo, 
   });
 }
 
@@ -25,12 +25,12 @@ class TarefasPage extends StatefulWidget {
 }
 
 class _TarefasPageState extends State<TarefasPage> {
-  String prioridadeSelecionada = 'Todas'; // Alterado para incluir "Todas"
+  String prioridadeSelecionada = 'Todas'; 
   final List<String> prioridades = ['Todas', 'Alta', 'Média', 'Baixa'];
-  String ordenarPor = 'Prazo'; // Opção padrão de ordenação
+  String ordenarPor = 'Prazo'; 
   final List<String> opcoesOrdenacao = ['Prazo', 'Prioridade', 'Alfabética'];
 
-  // Lista de tarefas com prazos de exemplo - MANTENDO TODAS AS 5 TAREFAS ORIGINAIS
+
   final List<Tarefa> tarefas = [
     Tarefa(
       titulo: "Revisar proposta do projeto",
@@ -516,7 +516,7 @@ class _TarefasPageState extends State<TarefasPage> {
           border: Border(
             top: BorderSide(
               color: Color(0xFF818181),
-              width: 1,
+              width: 0.5,
             ),
           ),
           color: Colors.white,
@@ -541,7 +541,7 @@ class _TarefasPageState extends State<TarefasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const MetasPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_metas_cinza.png", height: 40),

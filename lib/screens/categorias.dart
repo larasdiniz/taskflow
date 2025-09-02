@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/login.dart';
+import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
 
 class CategoriasPage extends StatefulWidget {
@@ -164,9 +165,9 @@ class _CategoriasPageState extends State<CategoriasPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 children: [
-                  const Spacer(), // esquerda vazia
+                  const Spacer(), 
                   Expanded(
-                    flex: 1, // metade da tela (meio -> direita)
+                    flex: 1, 
                     child: GestureDetector(
                       onTap: () {
                         // ação de adicionar categoria
@@ -178,7 +179,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
-                          child: FittedBox( // evita overflow em larguras menores
+                          child: FittedBox( 
                             fit: BoxFit.scaleDown,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -215,7 +216,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
           border: Border(
             top: BorderSide(
               color: Color(0xFF818181),
-              width: 1,
+              width: 0.5,
             ),
           ),
           color: Colors.white,
@@ -240,7 +241,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const MetasPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_metas_cinza.png", height: 40),
