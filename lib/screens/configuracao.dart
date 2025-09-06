@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/screens/categorias.dart';
 import 'package:taskflow/screens/estatisticas.dart';
-import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
 
-class CategoriasPage extends StatefulWidget {
-  const CategoriasPage({super.key});
+class ConfiguracaoPage extends StatefulWidget {
+  const ConfiguracaoPage({super.key});
 
   @override
-  State<CategoriasPage> createState() => _CategoriasPageState();
+  State<ConfiguracaoPage> createState() => _ConfiguracaoPageState();
 }
 
-class _CategoriasPageState extends State<CategoriasPage> {
+class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
   // Lista de categorias
   final List<Map<String, dynamic>> categorias = [
     {
@@ -47,7 +47,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Categorias',
+          'Configurações',
           style: TextStyle(
             color: Color(0xFFA069FF),
             fontWeight: FontWeight.bold,
@@ -68,19 +68,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Color(0xFF000000),
-              size: 28,
-            ),
-            onPressed: () {
-              // lógica para adicionar categoria
-            },
-          ),
-          const SizedBox(width: 12),
-        ],
+        // actions removido
       ),
 
       body: SafeArea(
@@ -106,8 +94,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
                 itemCount: categorias.length,
                 itemBuilder: (context, index) {
                   final categoria = categorias[index];
-                  return Container
-                  (
+                  return Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -235,8 +222,13 @@ class _CategoriasPageState extends State<CategoriasPage> {
               child: Image.asset("assets/icons/icon_tarefas_cinza.png", height: 40),
             ),
             GestureDetector(
-              onTap: () {}, 
-              child: Image.asset("assets/icons/icon_categorias_roxo.png", height: 40),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CategoriasPage()),
+                );
+              }, 
+              child: Image.asset("assets/icons/icon_categorias_cinza.png", height: 40),
             ),
             GestureDetector(
               onTap: () {
@@ -257,13 +249,8 @@ class _CategoriasPageState extends State<CategoriasPage> {
               child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              },
-              child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),
+              onTap: () {},
+              child: Image.asset("assets/icons/icon-config-roxo.png", height: 40),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/categorias.dart';
+import 'package:taskflow/screens/estatisticas.dart';
 import 'package:taskflow/screens/login.dart';
-import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
 
 class MetasPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class MetasPage extends StatefulWidget {
 }
 
 class _MetasPageState extends State<MetasPage> {
-  double progressoMetaSemanal = 0.6; // exemplo: 60%
+  double progressoMetaSemanal = 0.76; 
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +44,7 @@ class _MetasPageState extends State<MetasPage> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Color(0xFF000000),
-              size: 28,
-            ),
-            onPressed: () {
-              // ação de adicionar nova meta
-            },
-          ),
-          const SizedBox(width: 12),
-        ],
+        // actions removido
       ),
 
       // Corpo da tela com rolagem
@@ -84,7 +72,7 @@ class _MetasPageState extends State<MetasPage> {
               ),
               const SizedBox(height: 20),
 
-              // Card Meta Semanal
+              // Card Meta Semanal atualizado
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -103,15 +91,41 @@ class _MetasPageState extends State<MetasPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Meta Semanal",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF130F2B),
-                      ),
+                    // Título com ícone e valor à direita
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset(
+                              "assets/icons/icon-selo-meta-semanal.png", 
+                              height: 24,
+                              width: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              "Meta Semanal",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF130F2B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Text(
+                          "19/25",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFA069FF),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
+
+                    // Barra de progresso
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: LinearProgressIndicator(
@@ -122,9 +136,11 @@ class _MetasPageState extends State<MetasPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      "${(progressoMetaSemanal * 100).toInt()}% concluído",
-                      style: const TextStyle(
+
+                    // Texto de progresso atualizado
+                    const Text(
+                      "76% concluído | 6 para a meta",
+                      style: TextStyle(
                         fontSize: 12,
                         color: Color(0xFF757575),
                       ),
@@ -438,7 +454,7 @@ class _MetasPageState extends State<MetasPage> {
 
               const SizedBox(height: 20),
 
-              // Botão + Editar Meta
+              // Botão Editar Meta
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
@@ -528,7 +544,7 @@ class _MetasPageState extends State<MetasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const EstatisticasPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),

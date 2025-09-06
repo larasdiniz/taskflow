@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/screens/estatisticas.dart';
 import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/categorias.dart';
 import 'package:intl/intl.dart';
@@ -550,7 +551,7 @@ class _TarefasPageState extends State<TarefasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const EstatisticasPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),
