@@ -4,6 +4,7 @@ import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/categorias.dart';
 import 'package:intl/intl.dart';
 import 'package:taskflow/screens/metas.dart'; 
+import 'package:taskflow/screens/configuracao.dart';
 
 class Tarefa {
   String titulo;
@@ -168,7 +169,7 @@ class _TarefasPageState extends State<TarefasPage> {
                 children: [
                   const CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/images/perfil.png'),
+                    backgroundImage: AssetImage('assets/images/foto_perfil.png'),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -560,7 +561,7 @@ class _TarefasPageState extends State<TarefasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const ConfiguracaoPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),

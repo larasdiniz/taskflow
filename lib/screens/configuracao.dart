@@ -12,29 +12,9 @@ class ConfiguracaoPage extends StatefulWidget {
 }
 
 class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
-  // Lista de categorias
-  final List<Map<String, dynamic>> categorias = [
-    {
-      "imagem": "assets/icons/icon_trabalho.png",
-      "titulo": "Trabalho",
-      "quantidade": 4,
-    },
-    {
-      "imagem": "assets/icons/icon_livro.png",
-      "titulo": "Estudos",
-      "quantidade": 8,
-    },
-    {
-      "imagem": "assets/icons/icon_casa.png",
-      "titulo": "Casa",
-      "quantidade": 5,
-    },
-    {
-      "imagem": "assets/icons/icon_coracao.png",
-      "titulo": "Saúde",
-      "quantidade": 3,
-    },
-  ];
+  bool isDarkMode = false; 
+  bool lembretesAtivos = false; 
+  bool notificacaoPrioridades = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -68,132 +48,219 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
             ),
           ),
         ),
-        // actions removido
       ),
 
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Text(
-                "Minhas Categorias",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF130F2B),
-                ),
-              ),
-            ),
-
-            // Lista de categorias
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: categorias.length,
-                itemBuilder: (context, index) {
-                  final categoria = categorias[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Card do Usuário
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Card(
+                  color: const Color(0xFFA069FF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
                     child: Row(
-                      children: [
-                        // Imagem da categoria
-                        Image.asset(
-                          categoria["imagem"],
-                          height: 50,
-                          width: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        const SizedBox(width: 12),
-
-                        // Título e quantidade
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              categoria["titulo"],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF130F2B),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "${categoria["quantidade"]} tarefas",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Botão + Nova Categoria (do meio até a direita)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                children: [
-                  const Spacer(), 
-                  Expanded(
-                    flex: 1, 
-                    child: GestureDetector(
-                      onTap: () {
-                        // ação de adicionar categoria
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFA069FF),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: FittedBox( 
-                            fit: BoxFit.scaleDown,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.add, color: Colors.white, size: 24),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Nova Categoria",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      children: const [
+                        CircleAvatar(
+                          radius: 28,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.person,
+                            size: 40,
+                            color: Color(0xFFA069FF),
                           ),
                         ),
-                      ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Usuário",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-          ],
+
+              // Seção Aparência
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  "Aparência",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Tema",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      isDarkMode ? "Escuro" : "Claro",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Switch(
+                  value: isDarkMode,
+                  activeColor: const Color(0xFFA069FF),
+                  onChanged: (value) {
+                    setState(() {
+                      isDarkMode = value;
+                    });
+                  },
+                ),
+              ),
+
+              // Seção Notificação
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  "Notificação",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Lembretes",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                subtitle: Text(
+                  lembretesAtivos ? "Ativado" : "Desativado",
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                trailing: Switch(
+                  value: lembretesAtivos,
+                  activeColor: const Color(0xFFA069FF),
+                  onChanged: (value) {
+                    setState(() {
+                      lembretesAtivos = value;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  "Notificação de Prioridades",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                subtitle: Text(
+                  notificacaoPrioridades ? "Ativado" : "Desativado",
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                trailing: Switch(
+                  value: notificacaoPrioridades,
+                  activeColor: const Color(0xFFA069FF),
+                  onChanged: (value) {
+                    setState(() {
+                      notificacaoPrioridades = value;
+                    });
+                  },
+                ),
+              ),
+
+              // Seção Sincronização
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  "Sincronização",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Firebase",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Supabase",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+              // Seção Conta
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  "Conta",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Gerenciar conta",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Sair",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
 
@@ -227,7 +294,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   context,
                   MaterialPageRoute(builder: (context) => const CategoriasPage()),
                 );
-              }, 
+              },
               child: Image.asset("assets/icons/icon_categorias_cinza.png", height: 40),
             ),
             GestureDetector(
