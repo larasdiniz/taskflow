@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/screens/configuracao.dart';
 import 'package:taskflow/screens/estatisticas.dart';
-import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
 
@@ -260,7 +260,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const ConfiguracaoPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),

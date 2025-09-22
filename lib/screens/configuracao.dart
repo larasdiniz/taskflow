@@ -3,6 +3,7 @@ import 'package:taskflow/screens/categorias.dart';
 import 'package:taskflow/screens/estatisticas.dart';
 import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
+import 'package:taskflow/screens/login.dart';
 
 class ConfiguracaoPage extends StatefulWidget {
   const ConfiguracaoPage({super.key});
@@ -12,9 +13,9 @@ class ConfiguracaoPage extends StatefulWidget {
 }
 
 class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
-  bool isDarkMode = false; 
-  bool lembretesAtivos = false; 
-  bool notificacaoPrioridades = false; 
+  bool isDarkMode = false;
+  bool lembretesAtivos = false;
+  bool notificacaoPrioridades = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,30 +60,70 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Card(
-                  color: const Color(0xFFA069FF),
+                  color: const Color(0xFFE0D9F0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Row(
-                      children: const [
-                        CircleAvatar(
-                          radius: 28,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Color(0xFFA069FF),
-                          ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: 28,
+                              backgroundImage:
+                                  AssetImage("assets/images/foto_perfil.png"),
+                              backgroundColor: Colors.white,
+                            ),
+                            const SizedBox(width: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Usuário",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF121417),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "ursula@task.flow",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF757575),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 16),
-                        Text(
-                          "Usuário",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+
+                        // Botão Editar
+                        OutlinedButton(
+                          onPressed: () {
+                            // ação do botão editar
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                                color: Color(0xFFA069FF), width: 1.5),
+                            foregroundColor: const Color(0xFFA069FF),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                          ),
+                          child: const Text(
+                            "Editar",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
@@ -126,7 +167,14 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                 ),
                 trailing: Switch(
                   value: isDarkMode,
-                  activeColor: const Color(0xFFA069FF),
+                  activeColor: Colors.white, // bolinha branca
+                  activeTrackColor:
+                      const Color(0xFFA069FF), // fundo roxo quando ativo
+                  inactiveThumbColor: Colors.white, // bolinha branca
+                  inactiveTrackColor: const Color(
+                      0xFFE0D9F0), // fundo lilás claro quando desativado
+                  trackOutlineColor: MaterialStateProperty.all(
+                      Colors.transparent), // sem borda
                   onChanged: (value) {
                     setState(() {
                       isDarkMode = value;
@@ -162,7 +210,12 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                 ),
                 trailing: Switch(
                   value: lembretesAtivos,
-                  activeColor: const Color(0xFFA069FF),
+                  activeColor: Colors.white,
+                  activeTrackColor: const Color(0xFFA069FF),
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: const Color(0xFFE0D9F0),
+                  trackOutlineColor:
+                      MaterialStateProperty.all(Colors.transparent),
                   onChanged: (value) {
                     setState(() {
                       lembretesAtivos = value;
@@ -185,7 +238,12 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                 ),
                 trailing: Switch(
                   value: notificacaoPrioridades,
-                  activeColor: const Color(0xFFA069FF),
+                  activeColor: Colors.white,
+                  activeTrackColor: const Color(0xFFA069FF),
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: const Color(0xFFE0D9F0),
+                  trackOutlineColor:
+                      MaterialStateProperty.all(Colors.transparent),
                   onChanged: (value) {
                     setState(() {
                       notificacaoPrioridades = value;
@@ -249,8 +307,8 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   ),
                 ),
               ),
-              const ListTile(
-                title: Text(
+              ListTile(
+                title: const Text(
                   "Sair",
                   style: TextStyle(
                     fontSize: 16,
@@ -258,6 +316,13 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
               ),
             ],
           ),
@@ -286,7 +351,8 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   MaterialPageRoute(builder: (context) => const TarefasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_tarefas_cinza.png", height: 40),
+              child: Image.asset("assets/icons/icon_tarefas_cinza.png",
+                  height: 40),
             ),
             GestureDetector(
               onTap: () {
@@ -295,7 +361,8 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   MaterialPageRoute(builder: (context) => const CategoriasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_categorias_cinza.png", height: 40),
+              child: Image.asset("assets/icons/icon_categorias_cinza.png",
+                  height: 40),
             ),
             GestureDetector(
               onTap: () {
@@ -304,20 +371,24 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   MaterialPageRoute(builder: (context) => const MetasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_metas_cinza.png", height: 40),
+              child: Image.asset("assets/icons/icon_metas_cinza.png",
+                  height: 40),
             ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EstatisticasPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const EstatisticasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),
+              child: Image.asset("assets/icons/icon_estatistica_cinza.png",
+                  height: 40),
             ),
             GestureDetector(
               onTap: () {},
-              child: Image.asset("assets/icons/icon-config-roxo.png", height: 40),
+              child:
+                  Image.asset("assets/icons/icon-config-roxo.png", height: 40),
             ),
           ],
         ),

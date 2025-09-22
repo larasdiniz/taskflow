@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskflow/screens/categorias.dart';
+import 'package:taskflow/screens/configuracao.dart';
 import 'package:taskflow/screens/estatisticas.dart';
-import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/tarefas.dart';
 
 class MetasPage extends StatefulWidget {
@@ -553,7 +553,7 @@ class _MetasPageState extends State<MetasPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const ConfiguracaoPage()),
                 );
               },
               child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),
