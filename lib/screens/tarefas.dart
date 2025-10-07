@@ -5,6 +5,8 @@ import 'package:taskflow/screens/categorias.dart';
 import 'package:intl/intl.dart';
 import 'package:taskflow/screens/metas.dart'; 
 import 'package:taskflow/screens/configuracao.dart';
+import 'package:taskflow/screens/nova_tarefa.dart';
+import 'package:taskflow/screens/detalhes_tarefa.dart';
 
 class Tarefa {
   String titulo;
@@ -31,7 +33,6 @@ class _TarefasPageState extends State<TarefasPage> {
   final List<String> prioridades = ['Todas', 'Alta', 'Média', 'Baixa'];
   String ordenarPor = 'Prazo'; 
   final List<String> opcoesOrdenacao = ['Prazo', 'Prioridade', 'Alfabética'];
-
 
   final List<Tarefa> tarefas = [
     Tarefa(
@@ -151,7 +152,12 @@ class _TarefasPageState extends State<TarefasPage> {
               size: 28,
             ),
             onPressed: () {
-              // Aqui você pode adicionar a lógica para criar uma nova tarefa
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NovaTarefaPage(),
+                ),
+              );
             },
           ),
           const SizedBox(width: 12),
@@ -413,95 +419,112 @@ class _TarefasPageState extends State<TarefasPage> {
                 itemCount: tarefasOrdenadas.length,
                 itemBuilder: (context, index) {
                   final tarefa = tarefasOrdenadas[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tarefa.concluida = !tarefa.concluida;
-                            });
-                          },
-                          child: Container(
-                            height: 24,
-                            width: 24,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: tarefa.concluida
-                                  ? corDaBolinha(tarefa)
-                                  : Colors.transparent,
-                              border: Border.all(
-                                color: corDaBolinha(tarefa),
-                                width: 2,
-                              ),
-                            ),
-                            child: tarefa.concluida
-                                ? const Icon(
-                                    Icons.check,
-                                    size: 16,
-                                    color: Colors.white,
-                                  )
-                                : null,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalhesTarefaPage(
+                            titulo: tarefa.titulo,
+                            descricao: "Descrição da tarefa ${tarefa.titulo}", // Você pode ajustar isso
+                            prioridade: tarefa.prioridade,
+                            status: tarefa.concluida ? "Concluída" : "Pendente",
+                            categoria: "Geral", // Você pode ajustar isso
+                            prazo: tarefa.prazo ?? DateTime.now(), // Use uma data padrão se for null
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tarefa.titulo,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: tarefa.concluida
-                                      ? Colors.grey
-                                      : Colors.black,
-                                  decoration: tarefa.concluida
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.15),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                tarefa.concluida = !tarefa.concluida;
+                              });
+                            },
+                            child: Container(
+                              height: 24,
+                              width: 24,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: tarefa.concluida
+                                    ? corDaBolinha(tarefa)
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: corDaBolinha(tarefa),
+                                  width: 2,
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Prioridade: ${tarefa.prioridade}",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
+                              child: tarefa.concluida
+                                  ? const Icon(
+                                      Icons.check,
+                                      size: 16,
+                                      color: Colors.white,
+                                    )
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  tarefa.titulo,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: tarefa.concluida
+                                        ? Colors.grey
+                                        : Colors.black,
+                                    decoration: tarefa.concluida
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
                                   ),
-                                  const SizedBox(width: 12),
-                                  if (tarefa.prazo != null)
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
                                     Text(
-                                      "Prazo: ${DateFormat('dd/MM/yyyy').format(tarefa.prazo!)}",
-                                      style: TextStyle(
+                                      "Prioridade: ${tarefa.prioridade}",
+                                      style: const TextStyle(
                                         fontSize: 12,
-                                        color: tarefa.prazo!.isBefore(DateTime.now().add(const Duration(days: 1)))
-                                            ? Colors.red
-                                            : Colors.grey,
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                ],
-                              ),
-                            ],
+                                    const SizedBox(width: 12),
+                                    if (tarefa.prazo != null)
+                                      Text(
+                                        "Prazo: ${DateFormat('dd/MM/yyyy').format(tarefa.prazo!)}",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: tarefa.prazo!.isBefore(DateTime.now().add(const Duration(days: 1)))
+                                              ? Colors.red
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
