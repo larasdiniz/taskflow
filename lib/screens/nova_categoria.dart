@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 
 class NovaCategoriaPage extends StatefulWidget {
   const NovaCategoriaPage({super.key});
@@ -49,32 +51,30 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F9),
+      backgroundColor: themeModel.currentTheme.scaffoldBackgroundColor,
       
       // AppBar
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F6F9),
+        backgroundColor: themeModel.currentTheme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Nova Categoria",
-          style: TextStyle(
-            color: Color(0xFFA069FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: themeModel.currentTheme.appBarTheme.titleTextStyle,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        iconTheme: themeModel.currentTheme.appBarTheme.iconTheme,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back,
-              color: Color(0xFF55525B),
+              color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF55525B),
               size: 28,
             ),
           ),
@@ -88,12 +88,20 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
             children: [
               // Campo para nome da categoria
               _buildCard(
+                themeModel: themeModel,
                 title: "Nome da Categoria",
                 child: TextField(
                   controller: nomeController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: "Digite o nome da categoria",
+                    hintStyle: TextStyle(
+                      color: themeModel.isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                     border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -102,6 +110,7 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
               
               // Seletor de ícone
               _buildCard(
+                themeModel: themeModel,
                 title: "Ícone",
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,9 +130,9 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                           const SizedBox(height: 8),
                           Text(
                             _getNomeIcone(iconeSelecionado),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey,
+                              color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                             ),
                           ),
                         ],
@@ -155,15 +164,17 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFA069FF).withOpacity(0.1) : Colors.white,
+                              color: isSelected 
+                                  ? themeModel.currentTheme.primaryColor.withOpacity(0.1) 
+                                  : themeModel.currentTheme.colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: isSelected ? const Color(0xFFA069FF) : Colors.transparent,
+                                color: isSelected ? themeModel.currentTheme.primaryColor : Colors.transparent,
                                 width: 2,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
+                                  color: Colors.grey.withOpacity(themeModel.isDarkMode ? 0.1 : 0.15),
                                   blurRadius: 3,
                                   offset: const Offset(0, 2),
                                 ),
@@ -183,7 +194,9 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                                   icone["nome"]!,
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: isSelected ? const Color(0xFFA069FF) : Colors.grey,
+                                    color: isSelected 
+                                        ? themeModel.currentTheme.primaryColor 
+                                        : (themeModel.isDarkMode ? Colors.white54 : Colors.grey),
                                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                                   ),
                                   textAlign: TextAlign.center,
@@ -207,7 +220,7 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFDFE1E4),
+                        backgroundColor: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFFDFE1E4),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -216,9 +229,12 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
+                      child: Text(
                         "Cancelar",
-                        style: TextStyle(color: Color(0xFF818181), fontSize: 16),
+                        style: TextStyle(
+                          color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF818181), 
+                          fontSize: 16
+                        ),
                       ),
                     ),
                   ),
@@ -226,7 +242,7 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFA069FF),
+                        backgroundColor: themeModel.currentTheme.primaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -236,8 +252,8 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
                         // Validar e salvar a nova categoria
                         if (nomeController.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Por favor, digite um nome para a categoria"),
+                            SnackBar(
+                              content: const Text("Por favor, digite um nome para a categoria"),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -269,14 +285,14 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
     );
   }
 
-  Widget _buildCard({required String title, required Widget child}) {
+  Widget _buildCard({required ThemeModel themeModel, required String title, required Widget child}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF413491),
+          style: TextStyle(
+            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -285,7 +301,7 @@ class _NovaCategoriaPageState extends State<NovaCategoriaPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFFEEEBF5),
+            color: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFEEEBF5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: child,

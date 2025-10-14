@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 import 'package:taskflow/screens/estatisticas.dart';
 import 'package:taskflow/screens/login.dart';
 import 'package:taskflow/screens/categorias.dart';
@@ -87,7 +89,6 @@ class _TarefasPageState extends State<TarefasPage> {
     switch (ordenarPor) {
       case 'Prazo':
         tarefasFiltradas.sort((a, b) {
-          // Tarefas sem prazo vão para o final
           if (a.prazo == null && b.prazo == null) return 0;
           if (a.prazo == null) return 1;
           if (b.prazo == null) return -1;
@@ -95,7 +96,6 @@ class _TarefasPageState extends State<TarefasPage> {
         });
         break;
       case 'Prioridade':
-        // Ordenar por prioridade (Alta > Média > Baixa)
         final ordemPrioridade = {'Alta': 1, 'Média': 2, 'Baixa': 3};
         tarefasFiltradas.sort((a, b) {
           return ordemPrioridade[a.prioridade]!.compareTo(ordemPrioridade[b.prioridade]!);
@@ -111,25 +111,22 @@ class _TarefasPageState extends State<TarefasPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
     final tarefasOrdenadas = getTarefasOrdenadas();
     
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F9),
+      backgroundColor: themeModel.currentTheme.scaffoldBackgroundColor,
       
       // AppBar
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F6F9),
+        backgroundColor: themeModel.currentTheme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Tarefas',
-          style: TextStyle(
-            color: Color(0xFFA069FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+          style: themeModel.currentTheme.appBarTheme.titleTextStyle,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        iconTheme: themeModel.currentTheme.appBarTheme.iconTheme,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: GestureDetector(
@@ -141,14 +138,18 @@ class _TarefasPageState extends State<TarefasPage> {
                 ),
               );
             },
-            child: Image.asset('assets/icons/icon_ajuda.png', height: 24),
+            child: Image.asset(
+              'assets/icons/icon_ajuda.png', 
+              height: 24,
+              color: themeModel.isDarkMode ? Colors.white70 : null,
+            ),
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.add,
-              color: Color(0xFF000000),
+              color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF000000),
               size: 28,
             ),
             onPressed: () {
@@ -180,19 +181,22 @@ class _TarefasPageState extends State<TarefasPage> {
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Olá, Ursula!",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF130F2B),
+                          color: themeModel.currentTheme.textTheme.bodyLarge?.color,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         "Vamos organizar suas tarefas",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 14, 
+                          color: themeModel.isDarkMode ? Colors.white70 : Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -251,8 +255,10 @@ class _TarefasPageState extends State<TarefasPage> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFC8B6F3), Color(0xFFE0D9F0)],
+                        gradient: LinearGradient(
+                          colors: themeModel.isDarkMode 
+                              ? [const Color(0xFF2A2A3D), const Color(0xFF1E1E2C)]
+                              : [const Color(0xFFC8B6F3), const Color(0xFFE0D9F0)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -260,15 +266,15 @@ class _TarefasPageState extends State<TarefasPage> {
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             "Em andamento",
                             style: TextStyle(
-                              color: Color(0xFF413491),
+                              color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -278,16 +284,16 @@ class _TarefasPageState extends State<TarefasPage> {
                                   Text(
                                     "3",
                                     style: TextStyle(
-                                      color: Color(0xFF413491),
+                                      color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(width: 4),
+                                  const SizedBox(width: 4),
                                   Text(
                                     "tarefas",
                                     style: TextStyle(
-                                      color: Color(0xFF413491),
+                                      color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -295,7 +301,7 @@ class _TarefasPageState extends State<TarefasPage> {
                               ),
                               Icon(
                                 Icons.directions_run,
-                                color: Color(0xFF413491),
+                                color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                                 size: 28,
                               ),
                             ],
@@ -374,18 +380,18 @@ class _TarefasPageState extends State<TarefasPage> {
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE0D9F0),
+                        color: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFE0D9F0),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: ordenarPor,
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.keyboard_arrow_down,
-                            color: Color(0xFF413491),
+                            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                           ),
-                          style: const TextStyle(
-                            color: Color(0xFF413491),
+                          style: TextStyle(
+                            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
@@ -426,11 +432,11 @@ class _TarefasPageState extends State<TarefasPage> {
                         MaterialPageRoute(
                           builder: (context) => DetalhesTarefaPage(
                             titulo: tarefa.titulo,
-                            descricao: "Descrição da tarefa ${tarefa.titulo}", // Você pode ajustar isso
+                            descricao: "Descrição da tarefa ${tarefa.titulo}",
                             prioridade: tarefa.prioridade,
                             status: tarefa.concluida ? "Concluída" : "Pendente",
-                            categoria: "Geral", // Você pode ajustar isso
-                            prazo: tarefa.prazo ?? DateTime.now(), // Use uma data padrão se for null
+                            categoria: "Geral",
+                            prazo: tarefa.prazo ?? DateTime.now(),
                           ),
                         ),
                       );
@@ -439,11 +445,11 @@ class _TarefasPageState extends State<TarefasPage> {
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: themeModel.currentTheme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.15),
+                            color: Colors.grey.withOpacity(themeModel.isDarkMode ? 0.1 : 0.15),
                             blurRadius: 5,
                             offset: const Offset(0, 3),
                           )
@@ -491,7 +497,7 @@ class _TarefasPageState extends State<TarefasPage> {
                                     fontWeight: FontWeight.w500,
                                     color: tarefa.concluida
                                         ? Colors.grey
-                                        : Colors.black,
+                                        : themeModel.currentTheme.textTheme.bodyLarge?.color,
                                     decoration: tarefa.concluida
                                         ? TextDecoration.lineThrough
                                         : TextDecoration.none,
@@ -502,9 +508,9 @@ class _TarefasPageState extends State<TarefasPage> {
                                   children: [
                                     Text(
                                       "Prioridade: ${tarefa.prioridade}",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey,
+                                        color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -515,7 +521,7 @@ class _TarefasPageState extends State<TarefasPage> {
                                           fontSize: 12,
                                           color: tarefa.prazo!.isBefore(DateTime.now().add(const Duration(days: 1)))
                                               ? Colors.red
-                                              : Colors.grey,
+                                              : themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                                         ),
                                       ),
                                   ],
@@ -534,24 +540,28 @@ class _TarefasPageState extends State<TarefasPage> {
         ),
       ),
 
-      // Footer simples
+      // Footer
       bottomNavigationBar: Container(
         height: 80,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Color(0xFF818181),
+              color: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFF818181),
               width: 0.5,
             ),
           ),
-          color: Colors.white,
+          color: themeModel.isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
               onTap: () {},
-              child: Image.asset("assets/icons/icon_tarefas_roxo.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_tarefas_roxo.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? themeModel.currentTheme.primaryColor : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -560,7 +570,11 @@ class _TarefasPageState extends State<TarefasPage> {
                   MaterialPageRoute(builder: (context) => const CategoriasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_categorias_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_categorias_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -569,7 +583,11 @@ class _TarefasPageState extends State<TarefasPage> {
                   MaterialPageRoute(builder: (context) => const MetasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_metas_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_metas_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -578,7 +596,11 @@ class _TarefasPageState extends State<TarefasPage> {
                   MaterialPageRoute(builder: (context) => const EstatisticasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_estatistica_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -587,7 +609,11 @@ class _TarefasPageState extends State<TarefasPage> {
                   MaterialPageRoute(builder: (context) => const ConfiguracaoPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_config_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
           ],
         ),

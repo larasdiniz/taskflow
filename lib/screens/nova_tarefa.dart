@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 import 'package:intl/intl.dart';
 
 class NovaTarefaPage extends StatefulWidget {
@@ -39,21 +41,26 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F9),
+      backgroundColor: themeModel.currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F6F9),
+        backgroundColor: themeModel.currentTheme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Nova Tarefa",
-          style: TextStyle(
-            color: Color(0xFFA069FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: themeModel.currentTheme.appBarTheme.titleTextStyle,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        iconTheme: themeModel.currentTheme.appBarTheme.iconTheme,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF55525B),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -61,29 +68,46 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
           child: Column(
             children: [
               _buildCard(
+                themeModel: themeModel,
                 title: "Tarefa",
                 child: TextField(
                   controller: tituloController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: "Digite o título da tarefa",
+                    hintStyle: TextStyle(
+                      color: themeModel.isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                     border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                    fontSize: 16,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               _buildCard(
+                themeModel: themeModel,
                 title: "Descrição",
                 child: TextField(
                   controller: descricaoController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: "Adicione uma breve descrição",
+                    hintStyle: TextStyle(
+                      color: themeModel.isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                     border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                    fontSize: 16,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Prioridade",
                 value: prioridadeSelecionada,
                 items: prioridades,
@@ -91,6 +115,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Status",
                 value: statusSelecionado,
                 items: status,
@@ -98,6 +123,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Categoria",
                 value: categoriaSelecionada,
                 items: categorias,
@@ -105,6 +131,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildCard(
+                themeModel: themeModel,
                 title: "Prazo",
                 child: GestureDetector(
                   onTap: selecionarPrazo,
@@ -115,9 +142,15 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
                         prazoSelecionado != null
                             ? DateFormat('dd/MM/yyyy').format(prazoSelecionado!)
                             : "Selecione o prazo",
-                        style: const TextStyle(fontSize: 16, color: Colors.black54),
+                        style: TextStyle(
+                          fontSize: 16, 
+                          color: themeModel.isDarkMode ? Colors.white70 : Colors.black54,
+                        ),
                       ),
-                      const Icon(Icons.calendar_today, color: Color(0xFFA069FF)),
+                      Icon(
+                        Icons.calendar_today, 
+                        color: themeModel.currentTheme.primaryColor,
+                      ),
                     ],
                   ),
                 ),
@@ -128,7 +161,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFDFE1E4),
+                        backgroundColor: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFFDFE1E4),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -137,9 +170,12 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        "Excluir",
-                        style: TextStyle(color: Color(0xFF818181), fontSize: 16),
+                      child: Text(
+                        "Cancelar",
+                        style: TextStyle(
+                          color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF818181), 
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -147,7 +183,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFA069FF),
+                        backgroundColor: themeModel.currentTheme.primaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -172,14 +208,18 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
     );
   }
 
-  Widget _buildCard({required String title, required Widget child}) {
+  Widget _buildCard({
+    required ThemeModel themeModel,
+    required String title, 
+    required Widget child
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF413491),
+          style: TextStyle(
+            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -188,7 +228,7 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFFEEEBF5),
+            color: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFEEEBF5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: child,
@@ -198,23 +238,33 @@ class _NovaTarefaPageState extends State<NovaTarefaPage> {
   }
 
   Widget _buildDropdownCard({
+    required ThemeModel themeModel,
     required String title,
     required String value,
     required List<String> items,
     required Function(String?) onChanged,
   }) {
     return _buildCard(
+      themeModel: themeModel,
       title: title,
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          dropdownColor: const Color(0xFFEEEBF5),
-          style: const TextStyle(color: Colors.black87, fontSize: 16),
+          dropdownColor: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFEEEBF5),
+          style: TextStyle(
+            color: themeModel.currentTheme.textTheme.bodyLarge?.color, 
+            fontSize: 16
+          ),
           items: items
               .map((item) => DropdownMenuItem(
                     value: item,
-                    child: Text(item),
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                      ),
+                    ),
                   ))
               .toList(),
           onChanged: onChanged,

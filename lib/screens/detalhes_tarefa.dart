@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 import 'package:intl/intl.dart';
 
 class DetalhesTarefaPage extends StatefulWidget {
@@ -31,9 +33,8 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
   late String categoriaSelecionada;
   late DateTime prazoSelecionado;
 
-  // Use Set para evitar valores duplicados
   final List<String> prioridades = ['Alta', 'Média', 'Baixa'];
-  final List<String> statusList = ['Em andamento', 'Concluída', 'Pendente']; // Renomeado para evitar conflito
+  final List<String> statusList = ['Em andamento', 'Concluída', 'Pendente'];
   final List<String> categorias = ['Trabalho', 'Estudo', 'Pessoal'];
 
   @override
@@ -42,7 +43,6 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
     tituloController = TextEditingController(text: widget.titulo);
     descricaoController = TextEditingController(text: widget.descricao);
     
-    // Garantir que os valores iniciais estejam nas listas
     prioridadeSelecionada = prioridades.contains(widget.prioridade) 
         ? widget.prioridade 
         : prioridades.first;
@@ -83,23 +83,24 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F9),
+      backgroundColor: themeModel.currentTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F6F9),
+        backgroundColor: themeModel.currentTheme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Detalhes da Tarefa",
-          style: TextStyle(
-            color: Color(0xFFA069FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: themeModel.currentTheme.appBarTheme.titleTextStyle,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        iconTheme: themeModel.currentTheme.appBarTheme.iconTheme,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF55525B),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -109,31 +110,46 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
           child: Column(
             children: [
               _buildCard(
+                themeModel: themeModel,
                 title: "Tarefa",
                 child: TextField(
                   controller: tituloController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Digite o título da tarefa",
+                    hintStyle: TextStyle(
+                      color: themeModel.isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                   ),
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                    fontSize: 16,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               _buildCard(
+                themeModel: themeModel,
                 title: "Descrição",
                 child: TextField(
                   controller: descricaoController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Digite a descrição da tarefa",
+                    hintStyle: TextStyle(
+                      color: themeModel.isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                   ),
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                    fontSize: 16,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Prioridade",
                 value: prioridadeSelecionada,
                 items: prioridades,
@@ -145,6 +161,7 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Status",
                 value: statusSelecionado,
                 items: statusList,
@@ -156,6 +173,7 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildDropdownCard(
+                themeModel: themeModel,
                 title: "Categoria",
                 value: categoriaSelecionada,
                 items: categorias,
@@ -167,6 +185,7 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
               ),
               const SizedBox(height: 16),
               _buildCard(
+                themeModel: themeModel,
                 title: "Prazo",
                 child: GestureDetector(
                   onTap: selecionarPrazo,
@@ -175,12 +194,15 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
                     children: [
                       Text(
                         DateFormat('dd/MM/yyyy').format(prazoSelecionado),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16, 
-                          color: Colors.black87,
+                          color: themeModel.isDarkMode ? Colors.white70 : Colors.black87,
                         ),
                       ),
-                      const Icon(Icons.calendar_today, color: Color(0xFFA069FF)),
+                      Icon(
+                        Icons.calendar_today, 
+                        color: themeModel.currentTheme.primaryColor,
+                      ),
                     ],
                   ),
                 ),
@@ -191,19 +213,19 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFDFE1E4),
+                        backgroundColor: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFFDFE1E4),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       onPressed: () {
-                        _excluirTarefa(context);
+                        _excluirTarefa(context, themeModel);
                       },
-                      child: const Text(
+                      child: Text(
                         "Excluir",
                         style: TextStyle(
-                          color: Color(0xFF818181), 
+                          color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF818181), 
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -214,7 +236,7 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFA069FF),
+                        backgroundColor: themeModel.currentTheme.primaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -242,14 +264,18 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
     );
   }
 
-  Widget _buildCard({required String title, required Widget child}) {
+  Widget _buildCard({
+    required ThemeModel themeModel,
+    required String title, 
+    required Widget child
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF413491),
+          style: TextStyle(
+            color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF413491),
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -258,7 +284,7 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFFEEEBF5),
+            color: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFEEEBF5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: child,
@@ -268,29 +294,35 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
   }
 
   Widget _buildDropdownCard({
+    required ThemeModel themeModel,
     required String title,
     required String value,
     required List<String> items,
     required Function(String?) onChanged,
   }) {
-    // Verificação adicional para garantir que o valor está na lista
     final String safeValue = items.contains(value) ? value : items.first;
     
     return _buildCard(
+      themeModel: themeModel,
       title: title,
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: safeValue,
           isExpanded: true,
-          dropdownColor: const Color(0xFFEEEBF5),
-          style: const TextStyle(
-            color: Colors.black87, 
+          dropdownColor: themeModel.isDarkMode ? const Color(0xFF2A2A3D) : const Color(0xFFEEEBF5),
+          style: TextStyle(
+            color: themeModel.currentTheme.textTheme.bodyLarge?.color, 
             fontSize: 16,
           ),
           items: items
               .map((item) => DropdownMenuItem<String>(
                     value: item,
-                    child: Text(item),
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                      ),
+                    ),
                   ))
               .toList(),
           onChanged: onChanged,
@@ -300,7 +332,6 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
   }
 
   void _salvarEdicoes(BuildContext context) {
-    // Aqui você implementaria a lógica para salvar as edições
     final updatedData = {
       'titulo': tituloController.text,
       'descricao': descricaoController.text,
@@ -312,33 +343,48 @@ class _DetalhesTarefaPageState extends State<DetalhesTarefaPage> {
     
     print('Dados atualizados: $updatedData');
     
-    // Mostrar mensagem de sucesso
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Tarefa atualizada com sucesso!'),
-        backgroundColor: Color(0xFFA069FF),
+      SnackBar(
+        content: const Text('Tarefa atualizada com sucesso!'),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
     
     Navigator.pop(context, updatedData);
   }
 
-  void _excluirTarefa(BuildContext context) {
+  void _excluirTarefa(BuildContext context, ThemeModel themeModel) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Excluir Tarefa"),
-          content: const Text("Tem certeza que deseja excluir esta tarefa?"),
+          backgroundColor: themeModel.currentTheme.colorScheme.surface,
+          title: Text(
+            "Excluir Tarefa",
+            style: TextStyle(
+              color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+            ),
+          ),
+          content: Text(
+            "Tem certeza que deseja excluir esta tarefa?",
+            style: TextStyle(
+              color: themeModel.currentTheme.textTheme.bodyMedium?.color,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
+              child: Text(
+                "Cancelar",
+                style: TextStyle(
+                  color: themeModel.isDarkMode ? Colors.white70 : Colors.grey,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Fechar dialog
-                Navigator.pop(context, 'deleted'); // Retornar para tela anterior
+                Navigator.pop(context);
+                Navigator.pop(context, 'deleted');
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Tarefa excluída com sucesso!'),

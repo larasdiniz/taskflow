@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 import 'package:taskflow/screens/login.dart';
 
 void main() {
@@ -16,16 +18,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return ChangeNotifierProvider(
+      create: (context) => ThemeModel(),
+      child: Consumer<ThemeModel>(
+        builder: (context, themeModel, child) {
+          return MaterialApp(
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
+            title: 'TaskFlow',
+            theme: themeModel.currentTheme, // Usa o tema do ThemeModel
+            debugShowCheckedModeBanner: false,
+            home: const LoginPage(),
+          );
+        },
       ),
-      // Aqui o home será a sua página de login
-      home: const LoginPage(),
     );
   }
 }

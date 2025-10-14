@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskflow/models/theme_model.dart';
 import 'package:taskflow/screens/configuracao.dart';
 import 'package:taskflow/screens/estatisticas.dart';
 import 'package:taskflow/screens/metas.dart';
 import 'package:taskflow/screens/tarefas.dart';
-import 'package:taskflow/screens/nova_categoria.dart'; // Importe a nova tela
+import 'package:taskflow/screens/nova_categoria.dart';
 
 class CategoriasPage extends StatefulWidget {
   const CategoriasPage({super.key});
@@ -45,7 +47,6 @@ class _CategoriasPageState extends State<CategoriasPage> {
     );
     
     if (novaCategoria != null) {
-      // Adicionar a nova categoria à lista
       setState(() {
         categorias.add({
           "imagem": novaCategoria["icone"],
@@ -54,7 +55,6 @@ class _CategoriasPageState extends State<CategoriasPage> {
         });
       });
       
-      // Mostrar mensagem de sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Categoria "${novaCategoria["nome"]}" criada com sucesso!'),
@@ -67,32 +67,30 @@ class _CategoriasPageState extends State<CategoriasPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F9),
+      backgroundColor: themeModel.currentTheme.scaffoldBackgroundColor,
 
       // AppBar
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F6F9),
+        backgroundColor: themeModel.currentTheme.appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Categorias',
-          style: TextStyle(
-            color: Color(0xFFA069FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+          style: themeModel.currentTheme.appBarTheme.titleTextStyle,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFA069FF)),
+        iconTheme: themeModel.currentTheme.appBarTheme.iconTheme,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back,
-              color: Color(0xFF55525B),
+              color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF55525B),
               size: 28,
             ),
           ),
@@ -103,14 +101,14 @@ class _CategoriasPageState extends State<CategoriasPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Minhas Categorias",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF130F2B),
+                  color: themeModel.currentTheme.textTheme.bodyLarge?.color,
                 ),
               ),
             ),
@@ -118,29 +116,29 @@ class _CategoriasPageState extends State<CategoriasPage> {
             // Lista de categorias
             Expanded(
               child: categorias.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.category_outlined,
                             size: 64,
-                            color: Colors.grey,
+                            color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Text(
                             "Nenhuma categoria criada",
                             style: TextStyle(
                               fontSize: 18,
-                              color: Colors.grey,
+                              color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             "Clique em 'Nova Categoria' para começar",
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey,
+                              color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                             ),
                           ),
                         ],
@@ -155,11 +153,11 @@ class _CategoriasPageState extends State<CategoriasPage> {
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: themeModel.currentTheme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.15),
+                                color: Colors.grey.withOpacity(themeModel.isDarkMode ? 0.1 : 0.15),
                                 blurRadius: 5,
                                 offset: const Offset(0, 3),
                               ),
@@ -183,33 +181,32 @@ class _CategoriasPageState extends State<CategoriasPage> {
                                   children: [
                                     Text(
                                       categoria["titulo"],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xFF130F2B),
+                                        color: themeModel.currentTheme.textTheme.bodyLarge?.color,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       "${categoria["quantidade"]} tarefas",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey,
+                                        color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               
-                              // Botão de opções (opcional)
+                              // Botão de opções
                               IconButton(
                                 onPressed: () {
-                                  // Aqui você pode adicionar opções como editar/excluir
-                                  _mostrarOpcoesCategoria(context, index, categoria["titulo"]);
+                                  _mostrarOpcoesCategoria(context, index, categoria["titulo"], themeModel);
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.more_vert,
-                                  color: Colors.grey,
+                                  color: themeModel.isDarkMode ? Colors.white54 : Colors.grey,
                                 ),
                               ),
                             ],
@@ -219,7 +216,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
                     ),
             ),
 
-            // Botão + Nova Categoria (do meio até a direita)
+            // Botão + Nova Categoria
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
@@ -269,14 +266,14 @@ class _CategoriasPageState extends State<CategoriasPage> {
       // Footer
       bottomNavigationBar: Container(
         height: 80,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Color(0xFF818181),
+              color: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFF818181),
               width: 0.5,
             ),
           ),
-          color: Colors.white,
+          color: themeModel.isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -288,11 +285,19 @@ class _CategoriasPageState extends State<CategoriasPage> {
                   MaterialPageRoute(builder: (context) => const TarefasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_tarefas_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_tarefas_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {}, 
-              child: Image.asset("assets/icons/icon_categorias_roxo.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_categorias_roxo.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? const Color(0xFFA069FF) : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -301,7 +306,11 @@ class _CategoriasPageState extends State<CategoriasPage> {
                   MaterialPageRoute(builder: (context) => const MetasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_metas_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_metas_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -310,7 +319,11 @@ class _CategoriasPageState extends State<CategoriasPage> {
                   MaterialPageRoute(builder: (context) => const EstatisticasPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_estatistica_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_estatistica_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -319,7 +332,11 @@ class _CategoriasPageState extends State<CategoriasPage> {
                   MaterialPageRoute(builder: (context) => const ConfiguracaoPage()),
                 );
               },
-              child: Image.asset("assets/icons/icon_config_cinza.png", height: 40),
+              child: Image.asset(
+                "assets/icons/icon_config_cinza.png", 
+                height: 40,
+                color: themeModel.isDarkMode ? Colors.white54 : null,
+              ),
             ),
           ],
         ),
@@ -327,11 +344,11 @@ class _CategoriasPageState extends State<CategoriasPage> {
     );
   }
 
-  // Função para mostrar opções da categoria (editar/excluir)
-  void _mostrarOpcoesCategoria(BuildContext context, int index, String nomeCategoria) {
+  // Função para mostrar opções da categoria
+  void _mostrarOpcoesCategoria(BuildContext context, int index, String nomeCategoria, ThemeModel themeModel) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: themeModel.currentTheme.colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -345,16 +362,21 @@ class _CategoriasPageState extends State<CategoriasPage> {
             children: [
               Text(
                 nomeCategoria,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF130F2B),
+                  color: themeModel.currentTheme.textTheme.bodyLarge?.color,
                 ),
               ),
               const SizedBox(height: 20),
               ListTile(
-                leading: const Icon(Icons.edit, color: Color(0xFFA069FF)),
-                title: const Text('Editar Categoria'),
+                leading: Icon(Icons.edit, color: themeModel.currentTheme.primaryColor),
+                title: Text(
+                  'Editar Categoria',
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                  ),
+                ),
                 onTap: () {
                   Navigator.pop(context);
                   // Implementar edição
@@ -362,25 +384,32 @@ class _CategoriasPageState extends State<CategoriasPage> {
               ),
               ListTile(
                 leading: const Icon(Icons.delete, color: Colors.red),
-                title: const Text('Excluir Categoria'),
+                title: Text(
+                  'Excluir Categoria',
+                  style: TextStyle(
+                    color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+                  ),
+                ),
                 onTap: () {
                   Navigator.pop(context);
-                  _confirmarExclusao(context, index, nomeCategoria);
+                  _confirmarExclusao(context, index, nomeCategoria, themeModel);
                 },
               ),
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDFE1E4),
+                  backgroundColor: themeModel.isDarkMode ? const Color(0xFF333333) : const Color(0xFFDFE1E4),
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Cancelar',
-                  style: TextStyle(color: Color(0xFF818181)),
+                  style: TextStyle(
+                    color: themeModel.isDarkMode ? Colors.white70 : const Color(0xFF818181)
+                  ),
                 ),
               ),
             ],
@@ -391,16 +420,30 @@ class _CategoriasPageState extends State<CategoriasPage> {
   }
 
   // Função para confirmar exclusão
-  void _confirmarExclusao(BuildContext context, int index, String nomeCategoria) {
+  void _confirmarExclusao(BuildContext context, int index, String nomeCategoria, ThemeModel themeModel) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Excluir Categoria'),
-        content: Text('Tem certeza que deseja excluir a categoria "$nomeCategoria"?'),
+        backgroundColor: themeModel.currentTheme.colorScheme.surface,
+        title: Text(
+          'Excluir Categoria',
+          style: TextStyle(
+            color: themeModel.currentTheme.textTheme.bodyLarge?.color,
+          ),
+        ),
+        content: Text(
+          'Tem certeza que deseja excluir a categoria "$nomeCategoria"?',
+          style: TextStyle(
+            color: themeModel.currentTheme.textTheme.bodyMedium?.color,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+            child: Text(
+              'Cancelar', 
+              style: TextStyle(color: themeModel.isDarkMode ? Colors.white70 : Colors.grey)
+            ),
           ),
           TextButton(
             onPressed: () {
