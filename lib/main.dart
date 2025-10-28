@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:provider/provider.dart';
 import 'package:taskflow/models/theme_model.dart';
-import 'package:taskflow/screens/login.dart';
+import 'package:taskflow/screens/splash_screen.dart'; 
 
 void main() {
   runApp(
@@ -27,9 +27,9 @@ class MyApp extends StatelessWidget {
             locale: DevicePreview.locale(context),
             builder: DevicePreview.appBuilder,
             title: 'TaskFlow',
-            theme: themeModel.currentTheme, // Usa o tema do ThemeModel
+            theme: themeModel.currentTheme,
             debugShowCheckedModeBanner: false,
-            home: const LoginPage(),
+            home: const SplashScreen(), // <-- aqui
           );
         },
       ),
